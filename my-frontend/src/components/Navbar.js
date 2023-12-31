@@ -1,31 +1,32 @@
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SearchIcon from '@mui/icons-material/Search';
 
 function Navbar({ onAddTire, onSearchTire }) {
-  return (
-    <AppBar position="static" style={{ backgroundColor: 'orange' }}>
-      <Toolbar style={{ justifyContent: 'space-between' }}>
+    // URL of the company logo
+    const logoUrl = 'https://i.postimg.cc/MpCNtPX6/Whats-App-Image-2023-12-27-at-4-24-00-PM.jpg';
 
-        <IconButton color="inherit" onClick={onAddTire}>
-          <AddCircleIcon />
-        </IconButton>
+    return (
+        <AppBar position="static" style={{ backgroundColor: 'orange' }}>
+            <Toolbar style={{ justifyContent: 'space-between', alignItems: 'center' }}>
 
-        <Typography variant="h6" style={{ flexGrow: 1, textAlign: 'center' }}>
-          HW Tire Inventory
-        </Typography>
+                <IconButton color="inherit" onClick={onAddTire}>
+                    <AddCircleIcon />
+                </IconButton>
 
-        <IconButton color="inherit" onClick={onSearchTire}>
-          <SearchIcon />
-        </IconButton>
+                {/* Company Logo with adjusted size */}
+                <img src={logoUrl} alt="Company Logo" style={{ maxHeight: '50px', minHeight: '20px' }} />
 
-      </Toolbar>
-    </AppBar>
-  );
+                <IconButton color="inherit" onClick={onSearchTire}>
+                    <SearchIcon />
+                </IconButton>
+
+            </Toolbar>
+        </AppBar>
+    );
 }
 
 export default Navbar;

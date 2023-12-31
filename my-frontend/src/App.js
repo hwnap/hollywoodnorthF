@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Alert, Stack } from '@mui/material';
 import Navbar from './components/Navbar';
 import TireCard from './components/TireCard';
 import AddTirePopup from './components/AddTirePopup';
@@ -19,11 +20,21 @@ function App() {
   const [isResultsPopupOpen, setIsResultsPopupOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [lastSearchParams, setLastSearchParams] = useState({});
-  const [shouldRefreshSearch, setShouldRefreshSearch] = useState(false);
+  const [alert, setAlert] = useState({ show: false, severity: '', message: '' });
 
   useEffect(() => {
     fetchTires();
   }, []);
+
+  useEffect(() => {
+    if (alert.show) {
+      const timer = setTimeout(() => {
+        setAlert({ ...alert, show: false });
+      }, 4000); // Dismiss alert after 4 seconds
+
+      return () => clearTimeout(timer); // Cleanup timeout
+    }
+  }, [alert]);
 
   const fetchTires = async () => {
     try {
@@ -31,15 +42,18 @@ function App() {
       setTires(response.data);
     } catch (error) {
       console.error('Error fetching tires:', error);
+      setAlert({ show: true, severity: 'error', message: 'Error fetching tires: ' + error.message });
     }
   };
 
   const handleAddTire = async (tireData) => {
     try {
       await axios.post('http://localhost:4000/api/tires', tireData);
-      fetchTires();  // Refresh the tire list
+      fetchTires();
+      setAlert({ show: true, severity: 'success', message: 'Tire added successfully!' });
     } catch (error) {
       console.error('Error adding tire:', error);
+      setAlert({ show: true, severity: 'error', message: 'Failed to add tire: ' + error.message });
     }
   };
 
@@ -52,14 +66,16 @@ function App() {
     try {
       if (!editedTireData._id) {
         console.error("Tire ID is undefined");
+        setAlert({ show: true, severity: 'error', message: 'Tire ID is undefined' });
         return;
       }
       await axios.put(`http://localhost:4000/api/tires/${editedTireData._id}`, editedTireData);
-      fetchTires();  // Refresh the tire list
+      fetchTires();
       setIsEditPopupOpen(false);
-      setShouldRefreshSearch(true);  // Indicate that search results should be refreshed
+      setAlert({ show: true, severity: 'success', message: 'Tire edited successfully!' });
     } catch (error) {
       console.error('Error saving edited tire:', error);
+      setAlert({ show: true, severity: 'error', message: 'Failed to save edited tire: ' + error.message });
     }
   };
 
@@ -74,20 +90,28 @@ function App() {
       const response = await axios.get('http://localhost:4000/api/tires/search', { params: searchParams });
       setSearchResults(response.data);
       setIsResultsPopupOpen(true);
+      setAlert({ show: true, severity: 'info', message: `Found ${response.data.length} tire(s)` });
     } catch (error) {
       console.error('Error searching tires:', error);
+      setAlert({ show: true, severity: 'error', message: 'Error searching tires: ' + error.message });
     }
   };
 
-  const refreshSearchResults = () => {
-    if (shouldRefreshSearch && Object.keys(lastSearchParams).length !== 0) {
-      handleSearch(lastSearchParams);
-      setShouldRefreshSearch(false);
-    }
+  const handleCloseSearchResults = () => {
+    setIsResultsPopupOpen(false);
   };
 
   return (
     <div>
+      {alert.show && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+          <Stack sx={{ width: 'auto' }} spacing={2}>
+            <Alert variant="outlined" severity={alert.severity}>
+              {alert.message}
+            </Alert>
+          </Stack>
+        </div>
+      )}
       <Navbar
         onAddTire={() => setIsAddPopupOpen(true)}
         onSearchTire={() => setIsSearchPopupOpen(true)}
@@ -115,10 +139,7 @@ function App() {
       />
       <SearchResultsPopup
         open={isResultsPopupOpen}
-        onClose={() => {
-          setIsResultsPopupOpen(false);
-          refreshSearchResults();
-        }}
+        onClose={handleCloseSearchResults}
         searchResults={searchResults}
         onEdit={handleEditTire}
         onView={handleViewTire}

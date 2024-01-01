@@ -1,3 +1,4 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Alert, Stack } from '@mui/material';
@@ -10,7 +11,7 @@ import SearchPopup from './components/SearchPopup';
 import SearchResultsPopup from './components/SearchResultsPopup';
 import Grid from '@mui/material/Grid';
 
-const BACKEND_URL = 'https://hw-backend.onrender.com/api/tires'; // Backend URL
+const BACKEND_URL = 'https://hw-backend.onrender.com/api/tires';
 
 function App() {
   const [tires, setTires] = useState([]);
@@ -31,8 +32,8 @@ function App() {
     if (alert.show) {
       const timer = setTimeout(() => {
         setAlert({ ...alert, show: false });
-      }, 4000); // Dismiss alert after 4 seconds
-      return () => clearTimeout(timer); // Cleanup timeout
+      }, 4000);
+      return () => clearTimeout(timer);
     }
   }, [alert]);
 
@@ -96,6 +97,17 @@ function App() {
     }
   };
 
+  const handleDeleteTire = async (tireId) => {
+    try {
+      await axios.delete(`${BACKEND_URL}/${tireId}`);
+      fetchTires();
+      setAlert({ show: true, severity: 'success', message: 'Tire deleted successfully!' });
+    } catch (error) {
+      console.error('Error deleting tire:', error);
+      setAlert({ show: true, severity: 'error', message: 'Error deleting tire: ' + error.message });
+    }
+  };
+
   const handleCloseSearchResults = () => {
     setIsResultsPopupOpen(false);
   };
@@ -142,6 +154,7 @@ function App() {
         searchResults={searchResults}
         onEdit={handleEditTire}
         onView={handleViewTire}
+        onDelete={handleDeleteTire}  // Added delete function
       />
       <Grid container spacing={2} style={{ padding: 20 }}>
         {tires.map((tire) => (
@@ -150,6 +163,7 @@ function App() {
               tire={tire}
               onEdit={handleEditTire}
               onView={handleViewTire}
+              onDelete={handleDeleteTire}  // Added delete function
             />
           </Grid>
         ))}

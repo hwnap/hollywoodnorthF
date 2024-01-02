@@ -11,7 +11,7 @@ import SearchPopup from './components/SearchPopup';
 import SearchResultsPopup from './components/SearchResultsPopup';
 import Grid from '@mui/material/Grid';
 
-const BACKEND_URL = 'https://hw-backend.onrender.com/api/tires';
+const BACKEND_URL = 'https://hw-backend.onrender.com/api/tires'; // Backend URL
 
 function App() {
   const [tires, setTires] = useState([]);
@@ -22,6 +22,7 @@ function App() {
   const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false);
   const [isResultsPopupOpen, setIsResultsPopupOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const [lastSearchParams, setLastSearchParams] = useState({});
   const [alert, setAlert] = useState({ show: false, severity: '', message: '' });
 
   useEffect(() => {
@@ -32,14 +33,14 @@ function App() {
     if (alert.show) {
       const timer = setTimeout(() => {
         setAlert({ ...alert, show: false });
-      }, 4000);
-      return () => clearTimeout(timer);
+      }, 4000); // Dismiss alert after 4 seconds
+      return () => clearTimeout(timer); // Cleanup timeout
     }
   }, [alert]);
 
   const fetchTires = async () => {
     try {
-      const response = await axios.get(BACKEND_URL);
+      const response = await axios.get('http://localhost:4000/api/tires');
       setTires(response.data);
     } catch (error) {
       console.error('Error fetching tires:', error);
@@ -49,7 +50,7 @@ function App() {
 
   const handleAddTire = async (tireData) => {
     try {
-      await axios.post(BACKEND_URL, tireData);
+      await axios.post('http://localhost:4000/api/tires', tireData);
       fetchTires();
       setAlert({ show: true, severity: 'success', message: 'Tire added successfully!' });
     } catch (error) {
@@ -70,7 +71,7 @@ function App() {
         setAlert({ show: true, severity: 'error', message: 'Tire ID is undefined' });
         return;
       }
-      await axios.put(`${BACKEND_URL}/${editedTireData._id}`, editedTireData);
+      await axios.put(`http://localhost:4000/api/tires/${editedTireData._id}`, editedTireData);
       fetchTires();
       setIsEditPopupOpen(false);
       setAlert({ show: true, severity: 'success', message: 'Tire edited successfully!' });
@@ -86,8 +87,9 @@ function App() {
   };
 
   const handleSearch = async (searchParams) => {
+    setLastSearchParams(searchParams);
     try {
-      const response = await axios.get(`${BACKEND_URL}/search`, { params: searchParams });
+      const response = await axios.get('http://localhost:4000/api/tires/search', { params: searchParams });
       setSearchResults(response.data);
       setIsResultsPopupOpen(true);
       setAlert({ show: true, severity: 'info', message: `Found ${response.data.length} tire(s)` });

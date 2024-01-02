@@ -25,7 +25,8 @@ function TireCard({ tire, onView, onEdit, onDelete }) {
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Tread Condition: {tire.treadCondition} <br />
-            Status: {tire.status}
+            Status: {tire.status} <br />
+            Location: {tire.location} {/* Display location */}
           </Typography>
         </CardContent>
       </CardActionArea>

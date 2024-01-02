@@ -8,7 +8,8 @@ function TireEditPopup({ open, onClose, tire, onSave }) {
     size: '',
     treadCondition: '',
     status: '',
-    imageUrl: ''
+    imageUrl: '',
+    location: ''
   });
 
   useEffect(() => {
@@ -80,6 +81,20 @@ function TireEditPopup({ open, onClose, tire, onSave }) {
             <MenuItem value="not sold">Not Sold</MenuItem>
           </Select>
         </FormControl>
+        <FormControl fullWidth margin="dense">
+        <InputLabel id="location-label">Location</InputLabel>
+        <Select
+          labelId="location-label"
+          name="location"
+          value={tireData.location}
+          label="Location"
+          onChange={handleChange}
+        >
+          <MenuItem value="Toronto">Toronto</MenuItem>
+          <MenuItem value="Barrie">Barrie</MenuItem>
+          <MenuItem value="Sutton West">Sutton West</MenuItem>
+        </Select>
+      </FormControl>
         <TextField 
           name="imageUrl" 
           label="Image URL" 

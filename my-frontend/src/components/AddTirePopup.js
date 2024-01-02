@@ -8,7 +8,8 @@ function AddTirePopup({ open, onClose, onAddTire }) {
     size: '',
     treadCondition: '',
     status: '',
-    imageUrl: ''
+    imageUrl: '',
+    location: ''
   });
 
   const handleChange = (e) => {
@@ -43,6 +44,20 @@ function AddTirePopup({ open, onClose, onAddTire }) {
             <MenuItem value="not sold">Not Sold</MenuItem>
           </Select>
         </FormControl>
+        <FormControl fullWidth margin="dense">
+        <InputLabel id="location-label">Location</InputLabel>
+        <Select
+          labelId="location-label"
+          name="location"
+          value={tireData.location}
+          label="Location"
+          onChange={handleChange}
+        >
+          <MenuItem value="Toronto">Toronto</MenuItem>
+          <MenuItem value="Barrie">Barrie</MenuItem>
+          <MenuItem value="Sutton West">Sutton West</MenuItem>
+        </Select>
+      </FormControl>
         <TextField name="imageUrl" label="Image URL" fullWidth margin="dense" variant="standard" onChange={handleChange} />
       </DialogContent>
       <DialogActions>

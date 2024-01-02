@@ -11,8 +11,6 @@ import SearchPopup from './components/SearchPopup';
 import SearchResultsPopup from './components/SearchResultsPopup';
 import Grid from '@mui/material/Grid';
 
-const BACKEND_URL = 'https://hw-backend.onrender.com/api/tires'; // Backend URL
-
 function App() {
   const [tires, setTires] = useState([]);
   const [selectedTire, setSelectedTire] = useState(null);
@@ -34,6 +32,7 @@ function App() {
       const timer = setTimeout(() => {
         setAlert({ ...alert, show: false });
       }, 4000); // Dismiss alert after 4 seconds
+
       return () => clearTimeout(timer); // Cleanup timeout
     }
   }, [alert]);

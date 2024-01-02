@@ -1,9 +1,15 @@
 // src/components/TireCard.js
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Button, CardActions, CardActionArea } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';  // Import the delete icon
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function TireCard({ tire, onView, onEdit, onDelete }) {
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete the tire "${tire.brand} - ${tire.size}"?`)) {
+      onDelete(tire._id);
+    }
+  };
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
@@ -30,7 +36,7 @@ function TireCard({ tire, onView, onEdit, onDelete }) {
         <Button size="small" color="primary" onClick={() => onEdit(tire)}>
           Edit
         </Button>
-        <Button size="small" color="secondary" onClick={() => onDelete(tire._id)}>
+        <Button size="small" color="secondary" onClick={handleDelete}>
           <DeleteIcon /> Delete
         </Button>
       </CardActions>

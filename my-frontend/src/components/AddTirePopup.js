@@ -28,7 +28,33 @@ function AddTirePopup({ open, onClose, onAddTire }) {
       <DialogContent>
         <TextField name="brand" label="Brand" fullWidth margin="dense" variant="standard" onChange={handleChange} />
         <TextField name="size" label="Size" fullWidth margin="dense" variant="standard" onChange={handleChange} />
-        <TextField name="treadCondition" label="Tread Condition" fullWidth margin="dense" variant="standard" onChange={handleChange} />
+        <FormControl fullWidth margin="dense">
+        <InputLabel id="tread-condition-label">Tread Condition</InputLabel>
+        <Select
+          labelId="tread-condition-label"
+          name="treadCondition"
+          value={tireData.treadCondition}
+          label="Tread Condition"
+          onChange={handleChange}
+        >
+          {['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'].map((percent) => (
+            <MenuItem key={percent} value={percent}>{percent}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth margin="dense">
+        <InputLabel id="set-info-label">Tire Set</InputLabel>
+        <Select
+          labelId="set-info-label"
+          name="setInfo"
+          value={tireData.setInfo}
+          label="Tire Set"
+          onChange={handleChange}
+        >
+          <MenuItem value="Set of 2">Set of 2</MenuItem>
+          <MenuItem value="Set of 4">Set of 4</MenuItem>
+        </Select>
+      </FormControl>
         <FormControl fullWidth margin="dense">
           <InputLabel id="status-label">Status</InputLabel>
           <Select

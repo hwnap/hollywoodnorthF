@@ -63,22 +63,22 @@ function App() {
     };
 
     const handleSaveTire = async (editedTireData) => {
-        try {
-            if (!editedTireData._id) {
-                console.error("Tire ID is undefined");
-                setAlert({ show: true, severity: 'error', message: 'Tire ID is undefined' });
-                return;
-            }
-            await axios.put(`${BACKEND_URL}/${editedTireData._id}`, editedTireData);
-            fetchTires();
-            setIsEditPopupOpen(false);
-            setAlert({ show: true, severity: 'success', message: 'Tire edited successfully!' });
-        } catch (error) {
-            console.error('Error saving edited tire:', error);
-            setAlert({ show: true, severity: 'error', message: 'Failed to save edited tire: ' + error.message });
+      try {
+        if (!editedTireData._id) {
+          console.error("Tire ID is undefined");
+          setAlert({ show: true, severity: 'error', message: 'Tire ID is undefined' });
+          return;
         }
+        await axios.put(`${BACKEND_URL}/${editedTireData._id}`, editedTireData);
+        fetchTires();
+        setIsEditPopupOpen(false);
+        setAlert({ show: true, severity: 'success', message: 'Tire edited successfully!' });
+      } catch (error) {
+        console.error('Error saving edited tire:', error);
+        setAlert({ show: true, severity: 'error', message: 'Failed to save edited tire: ' + error.message });
+      }
     };
-
+    
     const handleViewTire = (tire) => {
         setSelectedTire(tire);
         setIsViewPopupOpen(true);

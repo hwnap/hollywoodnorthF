@@ -1,4 +1,3 @@
-// src/components/TireCard.js
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Button, CardActions, CardActionArea } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -10,13 +9,15 @@ function TireCard({ tire, onView, onEdit, onDelete }) {
     }
   };
 
+  const imageUrl = tire.imageUrls && tire.imageUrls.length > 0 ? tire.imageUrls[0] : '/default-image.jpg';
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
         <CardMedia
           component="img"
           height="140"
-          image={tire.imageUrl || '/default-image.jpg'}
+          image={imageUrl}
           alt={tire.brand}
         />
         <CardContent>
@@ -28,7 +29,7 @@ function TireCard({ tire, onView, onEdit, onDelete }) {
             Status: {tire.status} <br />
             Location: {tire.location} <br />
             Tire Set: {tire.setInfo}<br />
-          Season: {tire.season}
+            Season: {tire.season}
           </Typography>
         </CardContent>
       </CardActionArea>

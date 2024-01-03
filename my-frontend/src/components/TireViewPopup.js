@@ -7,9 +7,9 @@ function TireViewPopup({ open, onClose, tire }) {
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>View Tire</DialogTitle>
       <DialogContent>
-        {tire && (
-          <img src={tire.imageUrl || '/default-image.jpg'} alt={tire.brand} style={{ width: '100%' }} />
-        )}
+        {tire && tire.imageUrls.map((url, index) => (
+          <img key={index} src={url || '/default-image.jpg'} alt={`Tire ${index + 1}`} style={{ width: '100%', marginBottom: '10px' }} />
+        ))}
       </DialogContent>
       <Button onClick={onClose}>Close</Button>
     </Dialog>

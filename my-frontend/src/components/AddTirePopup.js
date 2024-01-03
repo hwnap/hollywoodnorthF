@@ -1,4 +1,3 @@
-// src/components/AddTirePopup.js
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
@@ -8,7 +7,7 @@ function AddTirePopup({ open, onClose, onAddTire }) {
     size: '',
     treadCondition: '',
     status: '',
-    imageUrls: '',
+    imageUrls: [],
     location: '',
     setInfo: '',
     season: ''
@@ -16,17 +15,18 @@ function AddTirePopup({ open, onClose, onAddTire }) {
 
   const handleChange = (e) => {
     if (e.target.name === 'imageUrls') {
-      setTireData({ ...tireData, [e.target.name]: e.target.value.split(',').map(url => url.trim()) });
+      // Split the input string by commas and trim each URL
+      const urls = e.target.value.split(',').map(url => url.trim());
+      setTireData({ ...tireData, imageUrls: urls });
     } else {
       setTireData({ ...tireData, [e.target.name]: e.target.value });
     }
   };
 
   const handleSubmit = () => {
-    const formattedData = { ...tireData, imageUrls: tireData.imageUrls.split(',').map(url => url.trim()) };
-    onAddTire(formattedData);
+    onAddTire(tireData);
     onClose();
-    setTireData({ brand: '', size: '', treadCondition: '', status: '', imageUrls: '', location: '', setInfo: '', season: '' }); // Reset form
+    setTireData({ brand: '', size: '', treadCondition: '', status: '', imageUrls: [], location: '', setInfo: '', season: '' }); // Reset form
   };
 
   return (
@@ -66,7 +66,15 @@ function AddTirePopup({ open, onClose, onAddTire }) {
             <MenuItem value="Sutton West">Sutton West</MenuItem>
           </Select>
         </FormControl>
-        <TextField name="imageUrls" label="Image URLs (comma separated)" fullWidth margin="dense" variant="standard" value={tireData.imageUrls.join(', ')} onChange={handleChange} helperText="Enter URLs separated by commas" />
+        <TextField
+name="imageUrls"
+label="Image URLs (comma separated)"
+fullWidth
+margin="dense"
+variant="standard"
+value={tireData.imageUrls.join(', ')} // Convert array ba‹ onChange=(handleChange}
+helperText="Enter URLs separated by commas"
+/>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>

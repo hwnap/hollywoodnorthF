@@ -107,6 +107,10 @@ function App() {
     const handleCloseSearchResults = () => {
       setIsResultsPopupOpen(false);
   };
+
+  const handleAdminAccess = (access) => {
+    setIsAdmin(access);
+};
     return (
         <div>
             {alert.show && (
@@ -121,7 +125,8 @@ function App() {
             <Navbar
                 onAddTire={() => setIsAddPopupOpen(true)}
                 onSearchTire={() => setIsSearchPopupOpen(true)}
-                onAdminAccess={() => setIsAdmin(!isAdmin)}
+                onAdminAccess={handleAdminAccess}
+                isAdmin={isAdmin}
             />
             <AddTirePopup
                 open={isAddPopupOpen}

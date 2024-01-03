@@ -11,9 +11,8 @@ import LinkIcon from '@mui/icons-material/Link';
 import VpnKeyIcon from '@mui/icons-material/VpnKey'; // Icon for admin access
 import AdminAccessPopup from './AdminAccessPopup';
 
-function Navbar({ onAddTire, onSearchTire }) {
+function Navbar({ onAddTire, onSearchTire, onAdminAccess, isAdmin }) {
     const [adminPopupOpen, setAdminPopupOpen] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
 
     const handleAdminPopupOpen = () => {
         setAdminPopupOpen(true);
@@ -24,7 +23,8 @@ function Navbar({ onAddTire, onSearchTire }) {
     };
     
     const handleAdminAccessGranted = (isGranted) => {
-        setIsAdmin(isGranted);
+        onAdminAccess(isGranted); // Use onAdminAccess from props
+        setAdminPopupOpen(false); // Close the popup
     };
 
     const logoUrl = 'https://i.postimg.cc/MpCNtPX6/Whats-App-Image-2023-12-27-at-4-24-00-PM.jpg';

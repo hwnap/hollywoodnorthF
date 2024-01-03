@@ -11,7 +11,7 @@ function AddTirePopup({ open, onClose, onAddTire }) {
     location: '',
     setInfo: '',
     season: '',
-    price: 0,
+    price: '',
     notes: ''
   });
 

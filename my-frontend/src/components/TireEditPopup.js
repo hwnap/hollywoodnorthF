@@ -13,7 +13,7 @@ function TireEditPopup({ open, onClose, tire, onSave }) {
     location: '',
     setInfo: '',
     season: '',
-    price: 0,
+    price: '',
     notes: ''
   });
 

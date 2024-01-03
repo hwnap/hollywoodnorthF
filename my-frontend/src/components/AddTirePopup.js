@@ -39,7 +39,7 @@ function AddTirePopup({ open, onClose, onAddTire }) {
         <FormControl fullWidth margin="dense">
           <InputLabel id="tread-condition-label">Tread Condition</InputLabel>
           <Select labelId="tread-condition-label" name="treadCondition" value={tireData.treadCondition} label="Tread Condition" onChange={handleChange}>
-            {['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'].map(percent => (
+            {['60%', '65%', '70%', '75%', '80%', '85%', '90%', '95%', '100%'].map(percent => (
               <MenuItem key={percent} value={percent}>{percent}</MenuItem>
             ))}
           </Select>

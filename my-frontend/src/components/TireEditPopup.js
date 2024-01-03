@@ -12,7 +12,9 @@ function TireEditPopup({ open, onClose, tire, onSave }) {
     imageUrls: [],
     location: '',
     setInfo: '',
-    season: ''
+    season: '',
+    price: 0,
+    notes: ''
   });
 
   useEffect(() => {
@@ -83,6 +85,27 @@ function TireEditPopup({ open, onClose, tire, onSave }) {
           </Select>
         </FormControl>
         <TextField name="imageUrls" label="Image URLs (comma separated)" fullWidth margin="dense" variant="standard" value={tireData.imageUrls.join(', ')} onChange={handleChange} helperText="Enter URLs separated by commas" />
+        <TextField 
+        name="price" 
+        label="Price" 
+        type="number"
+        fullWidth 
+        margin="dense" 
+        variant="standard" 
+        value={tireData.price} 
+        onChange={handleChange} 
+        />
+        <TextField 
+        name="notes" 
+        label="Notes" 
+        fullWidth 
+        margin="dense" 
+        variant="standard" 
+        multiline
+        rows={4}
+        value={tireData.notes} 
+        onChange={handleChange} 
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>

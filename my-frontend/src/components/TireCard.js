@@ -29,7 +29,9 @@ function TireCard({ tire, onView, onEdit, onDelete }) {
             Status: {tire.status} <br />
             Location: {tire.location} <br />
             Tire Set: {tire.setInfo}<br />
-            Season: {tire.season}
+            Season: {tire.season} <br />
+            Price: ${tire.price} <br />
+            Notes: {tire.notes}
           </Typography>
         </CardContent>
       </CardActionArea>

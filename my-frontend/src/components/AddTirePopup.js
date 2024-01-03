@@ -10,7 +10,9 @@ function AddTirePopup({ open, onClose, onAddTire }) {
     imageUrls: [],
     location: '',
     setInfo: '',
-    season: ''
+    season: '',
+    price: 0,
+    notes: ''
   });
 
   const handleChange = (e) => {
@@ -84,7 +86,30 @@ function AddTirePopup({ open, onClose, onAddTire }) {
           onChange={handleChange}
           helperText="Enter URLs separated by commas"
         />
+        <TextField 
+          name="price" 
+          label="Price" 
+          type="text" // Keep it as text to allow decimal points
+          fullWidth 
+          margin="dense" 
+          variant="standard" 
+          value={tireData.price} 
+          onChange={handleChange} 
+        />
+        <TextField 
+        name="notes" 
+        label="Notes" 
+        fullWidth 
+        margin="dense" 
+        variant="standard" 
+        multiline
+        rows={4}
+        value={tireData.notes} 
+        onChange={handleChange} 
+        helperText="Enter details and memos of the tire"
+        />
       </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button onClick={handleSubmit}>Add Tire</Button>

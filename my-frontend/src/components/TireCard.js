@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Button, CardActions, CardActionArea } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-function TireCard({ tire, onView, onEdit, onDelete }) {
+function TireCard({ tire, onView, onEdit, onDelete, isAdmin }) {
   const handleDelete = () => {
     if (window.confirm(`Are you sure you want to delete the tire "${tire.brand} - ${tire.size}"?`)) {
       onDelete(tire._id);
@@ -42,9 +42,12 @@ function TireCard({ tire, onView, onEdit, onDelete }) {
         <Button size="small" color="primary" onClick={() => onEdit(tire)}>
           Edit
         </Button>
-        <Button size="small" color="secondary" onClick={handleDelete}>
-          <DeleteIcon /> Delete
-        </Button>
+        {/* Only show the Delete button if isAdmin is true */}
+        {isAdmin && (
+          <Button size="small" color="secondary" onClick={handleDelete}>
+            <DeleteIcon /> Delete
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

@@ -8,15 +8,27 @@ import Menu from '@mui/material/Menu';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import LinkIcon from '@mui/icons-material/Link';
-import ArchiveIcon from '@mui/icons-material/Archive';
+import VpnKeyIcon from '@mui/icons-material/VpnKey'; // Icon for admin access
+import AdminAccessPopup from './AdminAccessPopup';
 
-function Navbar({ onAddTire, onSearchTire, onArchive }) {
-    // URL of the company logo
+function Navbar({ onAddTire, onSearchTire }) {
+    const [adminPopupOpen, setAdminPopupOpen] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    const handleAdminPopupOpen = () => {
+        setAdminPopupOpen(true);
+    };
+    
+    const handleAdminPopupClose = () => {
+        setAdminPopupOpen(false);
+    };
+    
+    const handleAdminAccessGranted = (isGranted) => {
+        setIsAdmin(isGranted);
+    };
+
     const logoUrl = 'https://i.postimg.cc/MpCNtPX6/Whats-App-Image-2023-12-27-at-4-24-00-PM.jpg';
-
-    // URL to open for image uploading
     const imageUploadUrl = 'https://postimages.org/';
-
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
@@ -31,8 +43,6 @@ function Navbar({ onAddTire, onSearchTire, onArchive }) {
     return (
         <AppBar position="static" style={{ backgroundColor: 'white' }}>
             <Toolbar style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-
-                {/* Hamburger Menu */}
                 <IconButton
                     style={{ color: 'orange' }}
                     edge="start"
@@ -41,7 +51,6 @@ function Navbar({ onAddTire, onSearchTire, onArchive }) {
                     <MenuIcon />
                 </IconButton>
 
-                {/* Menu Items */}
                 <Menu
                     anchorEl={anchorEl}
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -58,21 +67,25 @@ function Navbar({ onAddTire, onSearchTire, onArchive }) {
                         <LinkIcon style={{ marginRight: '10px', color: 'orange' }} />
                         Image Upload
                     </MenuItem>
-                    <MenuItem onClick={onArchive}>
-                        <ArchiveIcon style={{ marginRight: '10px', color: 'orange' }} />
-                        Archive
+                    <MenuItem onClick={handleAdminPopupOpen}>
+                        <VpnKeyIcon style={{ marginRight: '10px', color: 'orange' }} />
+                        Admin Access
                     </MenuItem>
                 </Menu>
 
-                {/* Company Logo */}
                 <img src={logoUrl} alt="Company Logo" style={{ maxHeight: '50px', minHeight: '20px' }} />
 
-                {/* Search Icon */}
                 <IconButton style={{ color: 'orange' }} onClick={onSearchTire}>
                     <SearchIcon />
                 </IconButton>
-
             </Toolbar>
+
+            {/* Admin Access Popup */}
+            <AdminAccessPopup
+                open={adminPopupOpen}
+                onClose={handleAdminPopupClose}
+                onAdminAccessGranted={handleAdminAccessGranted}
+            />
         </AppBar>
     );
 }

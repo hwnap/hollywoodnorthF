@@ -10,7 +10,7 @@ import SearchPopup from './components/SearchPopup';
 import SearchResultsPopup from './components/SearchResultsPopup';
 import Grid from '@mui/material/Grid';
 
-const BACKEND_URL = 'https://hw-backend.onrender.com/api/tires'; // Update this if necessary
+const BACKEND_URL = 'https://hw-backend.onrender.com/api/tires';
 
 function App() {
     const [tires, setTires] = useState([]);
@@ -22,19 +22,11 @@ function App() {
     const [isResultsPopupOpen, setIsResultsPopupOpen] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [alert, setAlert] = useState({ show: false, severity: '', message: '' });
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         fetchTires();
     }, []);
-
-    useEffect(() => {
-        if (alert.show) {
-            const timer = setTimeout(() => {
-                setAlert({ ...alert, show: false });
-            }, 4000);
-            return () => clearTimeout(timer);
-        }
-    }, [alert]);
 
     const fetchTires = async () => {
         try {
@@ -63,22 +55,22 @@ function App() {
     };
 
     const handleSaveTire = async (editedTireData) => {
-      try {
-        if (!editedTireData._id) {
-          console.error("Tire ID is undefined");
-          setAlert({ show: true, severity: 'error', message: 'Tire ID is undefined' });
-          return;
+        try {
+            if (!editedTireData._id) {
+                console.error("Tire ID is undefined");
+                setAlert({ show: true, severity: 'error', message: 'Tire ID is undefined' });
+                return;
+            }
+            await axios.put(`${BACKEND_URL}/${editedTireData._id}`, editedTireData);
+            fetchTires();
+            setIsEditPopupOpen(false);
+            setAlert({ show: true, severity: 'success', message: 'Tire edited successfully!' });
+        } catch (error) {
+            console.error('Error saving edited tire:', error);
+            setAlert({ show: true, severity: 'error', message: 'Failed to save edited tire: ' + error.message });
         }
-        await axios.put(`${BACKEND_URL}/${editedTireData._id}`, editedTireData);
-        fetchTires();
-        setIsEditPopupOpen(false);
-        setAlert({ show: true, severity: 'success', message: 'Tire edited successfully!' });
-      } catch (error) {
-        console.error('Error saving edited tire:', error);
-        setAlert({ show: true, severity: 'error', message: 'Failed to save edited tire: ' + error.message });
-      }
     };
-    
+
     const handleViewTire = (tire) => {
         setSelectedTire(tire);
         setIsViewPopupOpen(true);
@@ -97,6 +89,11 @@ function App() {
     };
 
     const handleDeleteTire = async (tireId) => {
+        if (!isAdmin) {
+            setAlert({ show: true, severity: 'error', message: 'Admin access required to delete tires.' });
+            return;
+        }
+
         try {
             await axios.delete(`${BACKEND_URL}/${tireId}`);
             fetchTires();
@@ -108,9 +105,8 @@ function App() {
     };
 
     const handleCloseSearchResults = () => {
-        setIsResultsPopupOpen(false);
-    };
-
+      setIsResultsPopupOpen(false);
+  };
     return (
         <div>
             {alert.show && (
@@ -125,6 +121,7 @@ function App() {
             <Navbar
                 onAddTire={() => setIsAddPopupOpen(true)}
                 onSearchTire={() => setIsSearchPopupOpen(true)}
+                onAdminAccess={() => setIsAdmin(!isAdmin)}
             />
             <AddTirePopup
                 open={isAddPopupOpen}
@@ -136,6 +133,7 @@ function App() {
                 onClose={() => setIsEditPopupOpen(false)}
                 tire={selectedTire}
                 onSave={handleSaveTire}
+                isAdmin={isAdmin}
             />
             <TireViewPopup
                 open={isViewPopupOpen}
@@ -154,6 +152,7 @@ function App() {
                 onEdit={handleEditTire}
                 onView={handleViewTire}
                 onDelete={handleDeleteTire}
+                isAdmin={isAdmin}
             />
             <Grid container spacing={2} style={{ padding: 20 }}>
                 {tires.map((tire) => (
@@ -163,6 +162,7 @@ function App() {
                             onEdit={handleEditTire}
                             onView={handleViewTire}
                             onDelete={handleDeleteTire}
+                            isAdmin={isAdmin}
                         />
                     </Grid>
                 ))}

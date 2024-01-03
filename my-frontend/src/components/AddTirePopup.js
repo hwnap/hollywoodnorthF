@@ -15,7 +15,6 @@ function AddTirePopup({ open, onClose, onAddTire }) {
 
   const handleChange = (e) => {
     if (e.target.name === 'imageUrls') {
-      // Split the input string by commas and trim each URL
       const urls = e.target.value.split(',').map(url => url.trim());
       setTireData({ ...tireData, imageUrls: urls });
     } else {
@@ -33,11 +32,33 @@ function AddTirePopup({ open, onClose, onAddTire }) {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Add New Tire</DialogTitle>
       <DialogContent>
-        <TextField name="brand" label="Brand" fullWidth margin="dense" variant="standard" value={tireData.brand} onChange={handleChange} />
-        <TextField name="size" label="Size" fullWidth margin="dense" variant="standard" value={tireData.size} onChange={handleChange} />
+        <TextField 
+          name="brand" 
+          label="Brand" 
+          fullWidth 
+          margin="dense" 
+          variant="standard" 
+          value={tireData.brand} 
+          onChange={handleChange} 
+        />
+        <TextField 
+          name="size" 
+          label="Size" 
+          fullWidth 
+          margin="dense" 
+          variant="standard" 
+          value={tireData.size} 
+          onChange={handleChange} 
+        />
         <FormControl fullWidth margin="dense">
           <InputLabel id="tread-condition-label">Tread Condition</InputLabel>
-          <Select labelId="tread-condition-label" name="treadCondition" value={tireData.treadCondition} label="Tread Condition" onChange={handleChange}>
+          <Select 
+            labelId="tread-condition-label" 
+            name="treadCondition" 
+            value={tireData.treadCondition} 
+            label="Tread Condition" 
+            onChange={handleChange}
+          >
             {['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'].map(percent => (
               <MenuItem key={percent} value={percent}>{percent}</MenuItem>
             ))}
@@ -45,7 +66,13 @@ function AddTirePopup({ open, onClose, onAddTire }) {
         </FormControl>
         <FormControl fullWidth margin="dense">
           <InputLabel id="season-label">Season</InputLabel>
-          <Select labelId="season-label" name="season" value={tireData.season} label="Season" onChange={handleChange}>
+          <Select 
+            labelId="season-label" 
+            name="season" 
+            value={tireData.season} 
+            label="Season" 
+            onChange={handleChange}
+          >
             <MenuItem value="All Season">All Season</MenuItem>
             <MenuItem value="Summer">Summer</MenuItem>
             <MenuItem value="Winter">Winter</MenuItem>
@@ -53,28 +80,41 @@ function AddTirePopup({ open, onClose, onAddTire }) {
         </FormControl>
         <FormControl fullWidth margin="dense">
           <InputLabel id="set-info-label">Tire Set</InputLabel>
-          <Select labelId="set-info-label" name="setInfo" value={tireData.setInfo} label="Tire Set" onChange={handleChange}>
+          <Select 
+            labelId="set-info-label" 
+            name="setInfo" 
+            value={tireData.setInfo} 
+            label="Tire Set" 
+            onChange={handleChange}
+          >
             <MenuItem value="Set of 2">Set of 2</MenuItem>
             <MenuItem value="Set of 4">Set of 4</MenuItem>
           </Select>
         </FormControl>
         <FormControl fullWidth margin="dense">
           <InputLabel id="location-label">Location</InputLabel>
-          <Select labelId="location-label" name="location" value={tireData.location} label="Location" onChange={handleChange}>
+          <Select 
+            labelId="location-label" 
+            name="location" 
+            value={tireData.location} 
+            label="Location" 
+            onChange={handleChange}
+          >
             <MenuItem value="Toronto">Toronto</MenuItem>
             <MenuItem value="Barrie">Barrie</MenuItem>
             <MenuItem value="Sutton West">Sutton West</MenuItem>
           </Select>
         </FormControl>
         <TextField
-name="imageUrls"
-label="Image URLs (comma separated)"
-fullWidth
-margin="dense"
-variant="standard"
-value={tireData.imageUrls.join(', ')} // Convert array ba‹ onChange=(handleChange}
-helperText="Enter URLs separated by commas"
-/>
+          name="imageUrls"
+          label="Image URLs (comma separated)"
+          fullWidth
+          margin="dense"
+          variant="standard"
+          value={tireData.imageUrls.join(', ')}
+          onChange={handleChange}
+          helperText="Enter URLs separated by commas"
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>

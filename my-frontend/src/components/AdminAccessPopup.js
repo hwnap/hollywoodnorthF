@@ -4,7 +4,7 @@ import config from '../config'; // Adjust the path based on your project structu
 
 const AdminAccessPopup = ({ open, onClose, onAdminAccessGranted }) => {
   const [adminCode, setAdminCode] = useState('');
-  const [alert, setAlert] = useState({ show: false, message: '', severity: '' });
+  const [alert, setAlert] = useState({ show: false, message: '', severity: '', duration: 4000 });
 
   const handleAdminCodeChange = (event) => {
     setAdminCode(event.target.value);

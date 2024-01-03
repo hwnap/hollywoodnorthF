@@ -21,7 +21,7 @@ function App() {
     const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false);
     const [isResultsPopupOpen, setIsResultsPopupOpen] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
-    const [alert, setAlert] = useState({ show: false, severity: '', message: '' });
+    const [alert, setAlert] = useState({ show: false, severity: '', message: '',duration: 4000 });
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {

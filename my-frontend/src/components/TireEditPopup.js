@@ -24,7 +24,7 @@ function TireEditPopup({ open, onClose, tire, onSave, isAdmin }) {
         size: tire.size,
         treadCondition: tire.treadCondition,
         status: tire.status,
-        imageUrls: tire.imageUrls,
+        imageUrls: Array.isArray(tire.imageUrls) ? tire.imageUrls : [],
         location: tire.location,
         setInfo: tire.setInfo,
         season: tire.season,
@@ -82,7 +82,16 @@ function TireEditPopup({ open, onClose, tire, onSave, isAdmin }) {
             <MenuItem value="Sutton West">Sutton West</MenuItem>
           </Select>
         </FormControl>
-        <TextField name="imageUrls" label="Image URLs (comma separated)" fullWidth margin="dense" variant="standard" value={tireData.imageUrls.join(', ')} onChange={handleChange} helperText="Enter URLs separated by commas" />
+        <TextField
+                    name="imageUrls"
+                    label="Image URLs (comma separated)"
+                    fullWidth
+                    margin="dense"
+                    variant="standard"
+                    value={tireData.imageUrls.join(', ')}
+                    onChange={e => setTireData({ ...tireData, imageUrls: e.target.value.split(',').map(url => url.trim()) })}
+                    helperText="Enter URLs separated by commas"
+                />
         {/* Price field with admin check */}
         <TextField 
           name="price" 

@@ -29,7 +29,9 @@ function TireEditPopup({ open, onClose, tire, onSave }) {
         imageUrls: tire.imageUrls,
         location: tire.location,
         setInfo: tire.setInfo,
-        season: tire.season
+        season: tire.season,
+        price: tire.price,
+        notes: tire.notes
       });
     }
   }, [tire]);

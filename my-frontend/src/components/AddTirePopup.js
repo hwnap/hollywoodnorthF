@@ -43,6 +43,20 @@ function AddTirePopup({ open, onClose, onAddTire }) {
         </Select>
       </FormControl>
       <FormControl fullWidth margin="dense">
+        <InputLabel id="season-label">Season</InputLabel>
+        <Select
+          labelId="season-label"
+          name="season"
+          value={tireData.season}
+          label="Season"
+          onChange={handleChange}
+        >
+          <MenuItem value="All Season">All Season</MenuItem>
+          <MenuItem value="Summer">Summer</MenuItem>
+          <MenuItem value="Winter">Winter</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl fullWidth margin="dense">
         <InputLabel id="set-info-label">Tire Set</InputLabel>
         <Select
           labelId="set-info-label"

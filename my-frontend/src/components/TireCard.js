@@ -13,7 +13,7 @@ function TireCard({ tire, onView, onEdit, onDelete, isAdmin }) {
 
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea>
+      <CardActionArea onClick={() => onView(tire)}>
         <CardMedia
           component="img"
           height="140"
@@ -36,17 +36,20 @@ function TireCard({ tire, onView, onEdit, onDelete, isAdmin }) {
         </CardContent>
       </CardActionArea>
       <CardActions>
+        {/* The View button is always visible */}
         <Button size="small" color="primary" onClick={() => onView(tire)}>
           View
         </Button>
-        <Button size="small" color="primary" onClick={() => onEdit(tire)}>
-          Edit
-        </Button>
-        {/* Only show the Delete button if isAdmin is true */}
+        {/* The Edit and Delete buttons are only visible if isAdmin is true */}
         {isAdmin && (
-          <Button size="small" color="secondary" onClick={handleDelete}>
-            <DeleteIcon /> Delete
-          </Button>
+          <>
+            <Button size="small" color="primary" onClick={() => onEdit(tire)}>
+              Edit
+            </Button>
+            <Button size="small" color="secondary" onClick={handleDelete}>
+              <DeleteIcon /> Delete
+            </Button>
+          </>
         )}
       </CardActions>
     </Card>

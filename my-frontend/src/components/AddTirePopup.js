@@ -17,7 +17,7 @@ function AddTirePopup({ open, onClose, onAddTire }) {
 
   const handleChange = (e) => {
     if (e.target.name === 'imageUrls') {
-      const urls = e.target.value.split(',').map(url => url.trim());
+      const urls = e.target.value.split('\n').map(url => url.trim());
       setTireData({ ...tireData, imageUrls: urls });
     } else {
       setTireData({ ...tireData, [e.target.name]: e.target.value });
@@ -78,13 +78,15 @@ function AddTirePopup({ open, onClose, onAddTire }) {
         </FormControl>
         <TextField
           name="imageUrls"
-          label="Image URLs (comma separated)"
+          label="Image URLs (one per line)"
           fullWidth
           margin="dense"
           variant="standard"
-          value={tireData.imageUrls.join(', ')}
+          value={tireData.imageUrls.join('\n')}
           onChange={handleChange}
-          helperText="Enter URLs separated by commas"
+          multiline
+           // Minimum number of rows
+          maxRows={6} // Maximum number of rows before scrolling
         />
         <TextField 
           name="price" 

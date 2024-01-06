@@ -35,7 +35,13 @@ function TireEditPopup({ open, onClose, tire, onSave, isAdmin }) {
   }, [tire]);
 
   const handleChange = (e) => {
-    setTireData({ ...tireData, [e.target.name]: e.target.value });
+    if (e.target.name === 'imageUrls') {
+      // Split the string by new lines and trim each URL
+      const urls = e.target.value.split('\n').map(url => url.trim());
+      setTireData({ ...tireData, imageUrls: urls });
+    } else {
+      setTireData({ ...tireData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = () => {
@@ -83,15 +89,18 @@ function TireEditPopup({ open, onClose, tire, onSave, isAdmin }) {
           </Select>
         </FormControl>
         <TextField
-                    name="imageUrls"
-                    label="Image URLs (comma separated)"
-                    fullWidth
-                    margin="dense"
-                    variant="standard"
-                    value={tireData.imageUrls.join(', ')}
-                    onChange={e => setTireData({ ...tireData, imageUrls: e.target.value.split(',').map(url => url.trim()) })}
-                    helperText="Enter URLs separated by commas"
-                />
+          name="imageUrls"
+          label="Image URLs (one per line)"
+          fullWidth
+          margin="dense"
+          variant="standard"
+          value={tireData.imageUrls.join('\n')} // Join the URLs with new lines for display
+          onChange={handleChange}
+          helperText="Enter each URL on a new line"
+          multiline
+          minRows={3} // Minimum number of rows
+          maxRows={6} // Maximum number of rows before scrolling
+        />
         {/* Price field with admin check */}
         <TextField 
           name="price" 

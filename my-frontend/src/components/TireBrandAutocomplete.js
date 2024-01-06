@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AutocompleteComponent from './Autocomplete'; // Adjust the path as needed
 
-const BACKEND_URL = 'http://localhost:4000/api/tires'; // Use your actual backend URL
+const BACKEND_URL = 'https://hw-backend.onrender.com/api/tires'; // Use your actual backend URL
 
 const TireBrandAutocomplete = ({ onBrandSelect }) => {
   const [tireBrands, setTireBrands] = useState([]);

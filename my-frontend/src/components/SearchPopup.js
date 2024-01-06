@@ -1,11 +1,11 @@
-// src/components/SearchPopup.js
 import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import TireSizeAutocomplete from './TireSizeAutocomplete'; // Import the TireSizeAutocomplete component
+import TireBrandAutocomplete from './TireBrandAutocomplete'; // Import the TireBrandAutocomplete component
 
 function SearchPopup({ open, onClose, onSearch }) {
   const [searchParams, setSearchParams] = useState({ size: '', brand: '' });
@@ -15,32 +15,20 @@ function SearchPopup({ open, onClose, onSearch }) {
     onClose();
   };
 
-  const handleChange = (e) => {
-    setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
+  const handleSizeSelect = (size) => {
+    setSearchParams({ ...searchParams, size });
+  };
+
+  const handleBrandSelect = (brand) => {
+    setSearchParams({ ...searchParams, brand });
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Search Tires</DialogTitle>
       <DialogContent>
-        <TextField
-          margin="dense"
-          name="size"
-          label="Size"
-          type="text"
-          fullWidth
-          variant="standard"
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
-          name="brand"
-          label="Brand"
-          type="text"
-          fullWidth
-          variant="standard"
-          onChange={handleChange}
-        />
+        <TireSizeAutocomplete onSizeSelect={handleSizeSelect} />
+        <TireBrandAutocomplete onBrandSelect={handleBrandSelect} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>

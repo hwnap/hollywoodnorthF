@@ -8,27 +8,11 @@ import Menu from '@mui/material/Menu';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import LinkIcon from '@mui/icons-material/Link';
-import VpnKeyIcon from '@mui/icons-material/VpnKey'; // Icon for admin access
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AdminAccessPopup from './AdminAccessPopup';
 
 function Navbar({ onAddTire, onSearchTire, onAdminAccess, isAdmin }) {
     const [adminPopupOpen, setAdminPopupOpen] = useState(false);
-
-    const handleAdminPopupOpen = () => {
-        setAdminPopupOpen(true);
-    };
-    
-    const handleAdminPopupClose = () => {
-        setAdminPopupOpen(false);
-    };
-    
-    const handleAdminAccessGranted = (isGranted) => {
-        onAdminAccess(isGranted); // Use onAdminAccess from props
-        setAdminPopupOpen(false); // Close the popup
-    };
-
-    const logoUrl = 'https://i.postimg.cc/MpCNtPX6/Whats-App-Image-2023-12-27-at-4-24-00-PM.jpg';
-    const imageUploadUrl = 'https://postimages.org/';
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
@@ -39,6 +23,33 @@ function Navbar({ onAddTire, onSearchTire, onAdminAccess, isAdmin }) {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+    const handleMenuOptionClick = (option) => {
+        setAnchorEl(null); // Close the menu
+        if (option === 'addTire' && isAdmin) {
+            onAddTire();
+        } else if (option === 'imageUpload') {
+            window.open(imageUploadUrl, '_blank');
+        } else if (option === 'adminAccess') {
+            handleAdminPopupOpen();
+        }
+    };
+
+    const handleAdminPopupOpen = () => {
+        setAdminPopupOpen(true);
+    };
+    
+    const handleAdminPopupClose = () => {
+        setAdminPopupOpen(false);
+    };
+    
+    const handleAdminAccessGranted = (isGranted) => {
+        onAdminAccess(isGranted);
+        setAdminPopupOpen(false);
+    };
+
+    const logoUrl = 'https://i.postimg.cc/MpCNtPX6/Whats-App-Image-2023-12-27-at-4-24-00-PM.jpg';
+    const imageUploadUrl = 'https://postimages.org/';
 
     return (
         <AppBar position="static" style={{ backgroundColor: 'white' }}>
@@ -59,11 +70,13 @@ function Navbar({ onAddTire, onSearchTire, onAdminAccess, isAdmin }) {
                     open={isMenuOpen}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={onAddTire}>
-                        <AddCircleIcon style={{ marginRight: '10px', color: 'orange' }} />
+                    <MenuItem 
+                        onClick={() => handleMenuOptionClick('addTire')}
+                        disabled={!isAdmin}>
+                        <AddCircleIcon style={{ marginRight: '10px', color: isAdmin ? 'orange' : 'grey' }} />
                         Add Tire
                     </MenuItem>
-                    <MenuItem onClick={() => window.open(imageUploadUrl, '_blank')}>
+                    <MenuItem onClick={() => handleMenuOptionClick('imageUpload')}>
                         <LinkIcon style={{ marginRight: '10px', color: 'orange' }} />
                         Image Upload
                     </MenuItem>

@@ -270,6 +270,8 @@ const handleMarkAsSold = async (tireId) => {
                 onEdit={handleEditTire}
                 onView={handleViewTire}
                 onDelete={handleDeleteTire}
+                onMarkAsNotSold={handleMarkAsNotSold}
+                onMarkAsSold={handleMarkAsSold}
                 isAdmin={isAdmin}
             />
             <Grid container spacing={2} style={{ padding: 20 }}>

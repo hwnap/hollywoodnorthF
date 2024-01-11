@@ -8,7 +8,7 @@ import Menu from '@mui/material/Menu';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import LinkIcon from '@mui/icons-material/Link';
-import VpnKeyIcon from '@mui/icons-material/VpnKey'; // Icon for admin access
+//import VpnKeyIcon from '@mui/icons-material/VpnKey'; // Icon for admin access
 import AdminAccessPopup from './AdminAccessPopup';
 import ManageAccountsTwoToneIcon from '@mui/icons-material/ManageAccountsTwoTone';
 import UpperManagementLoginPopup from './UpperManagementLoginPopup';
@@ -91,10 +91,10 @@ function Navbar({ onAddTire, onSearchTire, onAdminAccess, isAdmin,isLoggedIn, on
                         <LinkIcon style={{ marginRight: '10px', color: 'orange' }} />
                         Image Upload
                     </MenuItem>
-                    <MenuItem onClick={() => handleMenuOptionClick('adminAccess')}>
+                    {/* <MenuItem onClick={() => handleMenuOptionClick('adminAccess')}>
                         <VpnKeyIcon style={{ marginRight: '10px', color: 'orange' }} />
                         Admin Access
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem onClick={() => handleMenuOptionClick('upperManagement')}
                     disabled = "true">
                         <ManageAccountsTwoToneIcon style={{ marginRight: '10px', color: 'orange' }} />

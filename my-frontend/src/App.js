@@ -650,7 +650,15 @@ function App() {
 
                 <Grid container spacing={2} style={{ padding: 20 }}>
                   {tires.map((tire) => (
-                    <Grid item xs={12} sm={6} md={4} key={tire._id}>
+                    <Grid
+                      item
+                      xs={12} // Full width on extra-small devices
+                      sm={6} // Half width on small devices
+                      md={4} // One third width on medium devices
+                      lg={3} // One fourth width on large devices
+                      xl={2} // One sixth width on extra-large devices
+                      key={tire._id}
+                    >
                       <TireCard
                         tire={tire}
                         onEdit={handleEditTire}
@@ -659,7 +667,7 @@ function App() {
                         onMarkAsSold={handleMarkAsSold}
                         onMarkAsNotSold={handleMarkAsNotSold}
                         isAdmin={isAdmin}
-                        onOrder={handleOrderTire} // Pass handleOrderTire as a prop
+                        onOrder={handleOrderTire}
                       />
                     </Grid>
                   ))}

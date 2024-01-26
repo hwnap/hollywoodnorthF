@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Alert, Stack, Grid } from "@mui/material";
@@ -68,8 +68,20 @@ function App() {
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
   const [orderingTire, setOrderingTire] = useState(null);
   const [rSizeSearch, setRSizeSearch] = useState("");
-  const [originalTires, setOriginalTires] = useState([]);
-
+  const [searchedTires, setSearchedTires] = useState([]);
+  // Function to fetch tires by R size, memoized with useCallback
+  const fetchTiresByRSize = useCallback(async () => {
+    if (rSizeSearch.trim() !== "") {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/search-by-rsize`, {
+          params: { rSize: rSizeSearch },
+        });
+        setSearchedTires(response.data);
+      } catch (error) {
+        console.error("Error fetching tires by R size:", error);
+      }
+    }
+  }, [rSizeSearch]); // Dependency on rSizeSearch
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -78,11 +90,22 @@ function App() {
       setIsAdmin(
         decodedToken.role === "employee" || decodedToken.role === "manager"
       );
-      setIsManager(decodedToken.role === "manager"); // Set isManager true only for 'manager' role
+      setIsManager(decodedToken.role === "manager");
     }
     fetchTires();
     fetchOrders();
-  }, []);
+    fetchTiresByRSize();
+  }, [fetchTiresByRSize]); // Include fetchTiresByRSize in the dependency array
+
+  // Update tire details locally
+  const updateTireDetails = (updatedTire) => {
+    setSearchedTires((prevTires) =>
+      prevTires.map((tire) =>
+        tire._id === updatedTire._id ? updatedTire : tire
+      )
+    );
+  };
+
   const fetchOrders = async () => {
     // Fetch orders from your API and update state
     try {
@@ -265,17 +288,58 @@ function App() {
     setIsEditPopupOpen(true);
   };
 
+  // const handleMarkAsNotSold = async (tireId) => {
+  //   try {
+  //     // API call to mark the tire as not sold and remove the sale record
+  //     await axios.put(`${BACKEND_URL}/${tireId}/not-sold`);
+  //     fetchTires();
+  //     setAlert({
+  //       show: true,
+  //       severity: "success",
+  //       message:
+  //         "Tire marked as not sold successfully and sale record removed.",
+  //     });
+  //   } catch (error) {
+  //     console.error("Error in marking tire as not sold:", error);
+  //     setAlert({
+  //       show: true,
+  //       severity: "error",
+  //       message: "Failed to mark tire as not sold: " + error.message,
+  //     });
+  //   }
+  // };
   const handleMarkAsNotSold = async (tireId) => {
     try {
-      // API call to mark the tire as not sold and remove the sale record
-      await axios.put(`${BACKEND_URL}/${tireId}/not-sold`);
-      fetchTires();
-      setAlert({
-        show: true,
-        severity: "success",
-        message:
-          "Tire marked as not sold successfully and sale record removed.",
-      });
+      const response = await axios.put(`${BACKEND_URL}/${tireId}/not-sold`);
+
+      if (response.status === 200) {
+        // Update the local state to reflect the change
+        const updatedTires = tires.map((tire) => {
+          if (tire._id === tireId) {
+            return { ...tire, status: "not sold" }; // Update the status of the tire
+          }
+          return tire;
+        });
+        setTires(updatedTires);
+
+        // Do the same for searchedTires if it's being used
+        if (searchedTires.length > 0) {
+          const updatedSearchedTires = searchedTires.map((tire) => {
+            if (tire._id === tireId) {
+              return { ...tire, status: "not sold" };
+            }
+            return tire;
+          });
+          setSearchedTires(updatedSearchedTires);
+        }
+
+        setAlert({
+          show: true,
+          severity: "success",
+          message:
+            "Tire marked as not sold successfully and sale record removed.",
+        });
+      }
     } catch (error) {
       console.error("Error in marking tire as not sold:", error);
       setAlert({
@@ -285,31 +349,6 @@ function App() {
       });
     }
   };
-
-  //   const handleMarkAsNotSold = async (tireId) => {
-  //     try {
-  //       await axios.put(`${BACKEND_URL}/${tireId}/status`, {
-  //         status: "not sold",
-  //       });
-  //       setTires(
-  //         tires.map((tire) =>
-  //           tire._id === tireId ? { ...tire, status: "not sold" } : tire
-  //         )
-  //       );
-  //       setAlert({
-  //         show: true,
-  //         severity: "success",
-  //         message: "Tire marked as not sold successfully!",
-  //       });
-  //     } catch (error) {
-  //       console.error("Error marking tire as not sold:", error);
-  //       setAlert({
-  //         show: true,
-  //         severity: "error",
-  //         message: "Error marking tire as not sold: " + error.message,
-  //       });
-  //     }
-  //   };
 
   const handleSaveTire = async (editedTireData) => {
     try {
@@ -330,6 +369,7 @@ function App() {
         severity: "success",
         message: "Tire edited successfully!",
       });
+      updateTireDetails(editedTireData);
     } catch (error) {
       console.error("Error saving edited tire:", error);
       setAlert({
@@ -400,19 +440,41 @@ function App() {
   };
 
   const handleMarkAsSold = async (tireId) => {
-    const username = localStorage.getItem("username"); // Fetch the user ID from local storage
+    const username = localStorage.getItem("username");
 
     try {
-      await axios.put(`${BACKEND_URL}/${tireId}/status`, {
+      const response = await axios.put(`${BACKEND_URL}/${tireId}/status`, {
         status: "sold",
         username: username,
       });
-      fetchTires();
-      setAlert({
-        show: true,
-        severity: "success",
-        message: "Tire marked as sold successfully!",
-      });
+
+      if (response.status === 200) {
+        // Update the local state to reflect the change
+        const updatedTires = tires.map((tire) => {
+          if (tire._id === tireId) {
+            return { ...tire, status: "sold" }; // Update the status of the sold tire
+          }
+          return tire;
+        });
+        setTires(updatedTires);
+
+        // Do the same for searchedTires if it's being used
+        if (searchedTires.length > 0) {
+          const updatedSearchedTires = searchedTires.map((tire) => {
+            if (tire._id === tireId) {
+              return { ...tire, status: "sold" };
+            }
+            return tire;
+          });
+          setSearchedTires(updatedSearchedTires);
+        }
+
+        setAlert({
+          show: true,
+          severity: "success",
+          message: "Tire marked as sold successfully!",
+        });
+      }
     } catch (error) {
       console.error("Error marking tire as sold:", error);
       setAlert({
@@ -422,27 +484,51 @@ function App() {
       });
     }
   };
-  const fetchTiresByRSize = async () => {
-    if (rSizeSearch.trim() === "") {
-      setTires(originalTires); // Reset to original tires if search is cleared
-      return;
-    }
 
-    try {
-      const response = await axios.get(`${BACKEND_URL}/search-by-rsize`, {
-        params: { rSize: rSizeSearch },
-      });
-      if (!originalTires.length) setOriginalTires(tires); // Store original tires if not already stored
-      setTires(response.data); // Update tires based on search
-    } catch (error) {
-      console.error("Error fetching tires by R size:", error);
-      setAlert({
-        show: true,
-        severity: "error",
-        message: "Error fetching tires: " + error.message,
-      });
-    }
-  };
+  // const handleMarkAsSold = async (tireId) => {
+  //   const username = localStorage.getItem("username"); // Fetch the user ID from local storage
+
+  //   try {
+  //     await axios.put(`${BACKEND_URL}/${tireId}/status`, {
+  //       status: "sold",
+  //       username: username,
+  //     });
+  //     fetchTires();
+  //     setAlert({
+  //       show: true,
+  //       severity: "success",
+  //       message: "Tire marked as sold successfully!",
+  //     });
+  //   } catch (error) {
+  //     console.error("Error marking tire as sold:", error);
+  //     setAlert({
+  //       show: true,
+  //       severity: "error",
+  //       message: "Error marking tire as sold: " + error.message,
+  //     });
+  //   }
+  // };
+  // const fetchTiresByRSize = async () => {
+  //   if (rSizeSearch.trim() === "") {
+  //     setTires(originalTires); // Reset to original tires if search is cleared
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.get(`${BACKEND_URL}/search-by-rsize`, {
+  //       params: { rSize: rSizeSearch },
+  //     });
+  //     if (!originalTires.length) setOriginalTires(tires); // Store original tires if not already stored
+  //     setTires(response.data); // Update tires based on search
+  //   } catch (error) {
+  //     console.error("Error fetching tires by R size:", error);
+  //     setAlert({
+  //       show: true,
+  //       severity: "error",
+  //       message: "Error fetching tires: " + error.message,
+  //     });
+  //   }
+  // };
 
   // Function to open Classic Car Inventory Popup
   const openClassicCarInventoryPopup = () => {
@@ -649,28 +735,30 @@ function App() {
                 />
 
                 <Grid container spacing={2} style={{ padding: 20 }}>
-                  {tires.map((tire) => (
-                    <Grid
-                      item
-                      xs={12} // Full width on extra-small devices
-                      sm={6} // Half width on small devices
-                      md={4} // One third width on medium devices
-                      lg={3} // One fourth width on large devices
-                      xl={2} // One sixth width on extra-large devices
-                      key={tire._id}
-                    >
-                      <TireCard
-                        tire={tire}
-                        onEdit={handleEditTire}
-                        onView={handleViewTire}
-                        onDelete={handleDeleteTire}
-                        onMarkAsSold={handleMarkAsSold}
-                        onMarkAsNotSold={handleMarkAsNotSold}
-                        isAdmin={isAdmin}
-                        onOrder={handleOrderTire}
-                      />
-                    </Grid>
-                  ))}
+                  {(searchedTires.length > 0 ? searchedTires : tires).map(
+                    (tire) => (
+                      <Grid
+                        item
+                        xs={12} // Full width on extra-small devices
+                        sm={6} // Half width on small devices
+                        md={4} // One third width on medium devices
+                        lg={3} // One fourth width on large devices
+                        xl={2} // One sixth width on extra-large devices
+                        key={tire._id}
+                      >
+                        <TireCard
+                          tire={tire}
+                          onEdit={handleEditTire}
+                          onView={handleViewTire}
+                          onDelete={handleDeleteTire}
+                          onMarkAsSold={handleMarkAsSold}
+                          onMarkAsNotSold={handleMarkAsNotSold}
+                          isAdmin={isAdmin}
+                          onOrder={handleOrderTire}
+                        />
+                      </Grid>
+                    )
+                  )}
                 </Grid>
               </>
             }

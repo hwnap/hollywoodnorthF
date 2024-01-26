@@ -628,7 +628,7 @@ function App() {
           pendingOrdersCount={pendingOrdersCount}
         />
         <input
-          type="text"
+          type="number"
           placeholder="Enter R Size (e.g., 17)"
           value={rSizeSearch}
           onChange={(e) => setRSizeSearch(e.target.value)}

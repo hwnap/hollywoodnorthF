@@ -30,7 +30,7 @@ const TireSaleAnalytics = ({ onClose }) => {
 
   // Define the server endpoint as a variable
   //const serverEndpoint = "http://localhost:4000/api/tire-sales/reports-by-date-range";
-    const serverEndpoint = "https://hw-backend.onrender.com/api/tire-sales/reports-by-date-range";
+    const serverEndpoint = "https://hwnapbackend.onrender.com/api/tire-sales/reports-by-date-range";
 
     //https://hw-backend.onrender.com/api
   const handleStartDateChange = (event) => {

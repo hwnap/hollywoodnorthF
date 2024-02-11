@@ -4,7 +4,7 @@ import FolderIcon from '@mui/icons-material/Folder'; // Importing FolderIcon
 import axios from 'axios';
 
 //const BASE_API_URL = "http://localhost:4000/api";
-const BASE_API_URL = "https://hw-backend.onrender.com/api";
+const BASE_API_URL = "https://hwnapbackend.onrender.com/api";
 
 const CategoryCreationForm = ({ onSuccess }) => {
   const [categoryName, setCategoryName] = useState('');

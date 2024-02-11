@@ -18,10 +18,10 @@ import CustomerOrderDialog from "./components/CustomerOrderDialog";
 import { jwtDecode } from "jwt-decode";
 import OrderListPopup from "./components/OrderListPopup";
 
-const BACKEND_URL = "https://hw-backend.onrender.com/api/tires";
-const USER_URL = "https://hw-backend.onrender.com/api/users";
-const BACKEND_ORDER_URL = "https://hw-backend.onrender.com/api/orders";
-const BACKEND_ORDER_URL_EMAIL = "https://hw-backend.onrender.com/api/orders/";
+const BACKEND_URL = "https://hwnapbackend.onrender.com/api/tires";
+const USER_URL = "https://hwnapbackend.onrender.com/api/users";
+const BACKEND_ORDER_URL = "https://hwnapbackend.onrender.com/api/orders";
+const BACKEND_ORDER_URL_EMAIL = "https://hwnapbackend.onrender.com/api/orders/";
 // const BACKEND_ORDER_URL_EMAIL = "http://localhost:4000/api/orders/";
 // const BACKEND_ORDER_URL = "http://localhost:4000/api/orders/list-all";
 // const BACKEND_URL = "http://localhost:4000/api/tires";

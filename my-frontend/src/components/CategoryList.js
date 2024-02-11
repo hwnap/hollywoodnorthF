@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Define API endpoint
 //const CATEGORIES_ENDPOINT = 'http://localhost:4000/api/categories'; // Update this with your categories endpoint
-const CATEGORIES_ENDPOINT = 'https://hw-backend.onrender.com/api/categories'; 
+const CATEGORIES_ENDPOINT = 'https://hwnapbackend.onrender.com/api/categories'; 
 
 
 const CategoryList = ({ classicCarId }) => {
